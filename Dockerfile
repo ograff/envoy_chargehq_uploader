@@ -10,9 +10,11 @@ COPY src ./src
 
 # Build the application
 FROM --platform=$BUILDPLATFORM builder AS build-amd64
+RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo install --target x86_64-unknown-linux-musl --path .
 
 FROM --platform=$BUILDPLATFORM builder AS build-arm64
+RUN rustup target add aarch64-unknown-linux-musl
 RUN cargo install --target aarch64-unknown-linux-musl --path .
 
 # Set the working directory inside the container
