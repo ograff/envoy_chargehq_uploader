@@ -10,7 +10,7 @@ COPY src ./src
 
 # Build the application
 FROM --platform=$BUILDPLATFORM builder AS build-amd64
-RUN apt-get update && apt-get install -y gcc gcc-musl binutils-musl
+RUN apt-get update && apt-get install -y gcc musl musl-dev musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo install --target x86_64-unknown-linux-musl --path .
 
