@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the source code to the container
 COPY Cargo.toml .
-COPY src .
+COPY src ./src
 
 # Build the application
 RUN cargo build --release
