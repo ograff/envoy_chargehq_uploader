@@ -9,7 +9,7 @@ COPY Cargo.toml .
 COPY src ./src
 
 # Build the application
-FROM --platform=$BUILDPLATFORM -builder AS build-amd64
+FROM --platform=$BUILDPLATFORM builder AS build-amd64
 RUN cargo install --target x86_64-unknown-linux-musl --path .
 
 FROM --platform=$BUILDPLATFORM builder AS build-arm64
