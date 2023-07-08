@@ -16,11 +16,11 @@ FROM --platform=$BUILDPLATFORM builder AS build-arm64
 RUN cargo install --target aarch64-unknown-linux-musl --path .
 
 # Set the working directory inside the container
-WORKDIR /app
 FROM build-$BUILDARCH AS build_out
 # Copy the built application from the builder stage
 # Use a minimal Alpine-based image as the final base image
 FROM --platform=$TARGETPLATFORM alpine:latest
+WORKDIR /app
 
 COPY --from=build_out /app/target/release/chargehq_enphase_uploader .
 
