@@ -1,5 +1,5 @@
 # Use the official Rust Docker image as the base image
-FROM rust:latest as builder
+FROM --platform=$BUILDPLATFORM rust:latest as builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -9,16 +9,20 @@ COPY Cargo.toml .
 COPY src ./src
 
 # Build the application
-RUN cargo build --release
+FROM --platform=$BUILDPLATFORM -builder AS build-amd64
+RUN cargo install --target x86_64-unknown-linux-musl --path .
+
+FROM --platform=$BUILDPLATFORM builder AS build-arm64
+RUN cargo install --target aarch64-unknown-linux-musl --path .
 
 # Use a minimal Alpine-based image as the final base image
-FROM alpine:latest
+FROM --platform=$TARGETPLATFORM alpine:latest
 
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy the built application from the builder stage
-COPY --from=builder /app/target/release/chargehq_enphase_uploader .
+COPY --from=build-${BUILDARCH} /app/target/release/chargehq_enphase_uploader .
 
 # Copy the shell script to the container
 COPY run.sh .
