@@ -22,7 +22,7 @@ FROM --platform=$TARGETPLATFORM alpine:latest
 WORKDIR /app
 
 # Copy the built application from the builder stage
-COPY --from=build-${BUILDARCH} /app/target/release/chargehq_enphase_uploader .
+COPY --from=build-$BUILDARCH /app/target/release/chargehq_enphase_uploader .
 
 # Copy the shell script to the container
 COPY run.sh .
