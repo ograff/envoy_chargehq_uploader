@@ -5,7 +5,8 @@ FROM rust:latest as builder
 WORKDIR /app
 
 # Copy the source code to the container
-COPY Cargo.toml src .
+COPY Cargo.toml .
+COPY src .
 
 # Build the application
 RUN cargo build --release
