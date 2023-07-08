@@ -1,5 +1,5 @@
 # Use the official Rust Docker image as the base image
-FROM --platform=$BUILDPLATFORM rust:latest as builder
+FROM --platform=$BUILDPLATFORM ekidd/rust-musl-builder:latest as builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -15,7 +15,7 @@ RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo install --target x86_64-unknown-linux-musl --path .
 
 FROM --platform=$BUILDPLATFORM builder AS build-arm64
-RUN apt-get update && apt-get install -y gcc make gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+RUN apt-get update && apt-get install -y gcc make gcc-aarch64-linux-musl binutils-aarch64-linux-musl
 RUN rustup target add aarch64-unknown-linux-musl
 RUN cargo install --target aarch64-unknown-linux-musl --path .
 
